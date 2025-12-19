@@ -1,0 +1,68 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="w-100" style="max-width: 420px">
+    <h1 class="text-center mb-4">login form(template form)</h1>
+
+    <form #loginform="ngForm" (ngSubmit)="login(loginform)" class="border p-4 rounded shadow-sm">
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="text"
+          class="form-control"
+          name="email"
+          ngModel
+          required
+          minlength="3"
+          #email="ngModel"
+          placeholder="enter email"
+        />
+        <p class="text-danger mt-1" *ngIf="email.errors && email.touched">invalid email</p>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input
+          type="text"
+          class="form-control"
+          name="password"
+          ngModel
+          placeholder="enter password"
+          #password="ngModel"
+          required
+          minlength="7"
+          maxlength="127"
+        />
+        <p class="text-danger mt-1" *ngIf="password.errors?.['required'] && password.touched">
+          password is required
+        </p>
+        <p class="text-danger mt-1" *ngIf="password.errors?.['minlength'] && password.touched">
+          Password at least 7 characters
+        </p>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">uname</label>
+        <input
+          type="text"
+          class="form-control"
+          name="uname"
+          ngModel
+          placeholder="enter username"
+          required
+          #uname="ngModel"
+        />
+        <p class="text-danger mt-1" *ngIf="isSubmitted && uname.errors?.['required']">
+          username is required
+        </p>
+      </div>
+
+      <button type="submit" (click)="next()" class="btn btn-primary w-100">login</button>
+    </form>
+
+    <div class="container mt-4">
+      <h2 class="mb-3 text-center">users</h2>
+      <div *ngFor="let user of userData" class="border rounded p-2 mb-2 text-center">
+        <p class="mb-0">{{ user.email }}</p>
+      </div>
+    </div>
+  </div>
+</div>

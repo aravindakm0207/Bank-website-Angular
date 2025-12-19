@@ -1,0 +1,201 @@
+<nav class="navbar navbar-expand-sm bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">Bank</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Bank</a></li>
+      </ul>
+      <button class="btn btn-light btn-sm" (click)="next()">Sign Up</button>
+      <button class="btn btn-light btn-sm m-1" (click)="log()">Sign In</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid text-center about">
+  <!-- interpolation -->
+  <p>Welcome to {{ BankName }}</p>
+</div>
+
+<div class="container mt-2">
+  <button class="btn btn-secondary m-1" (click)="toggleSection('create')">create Account</button>
+  <!-- <button class="btn btn-primary m-1">Loan</button> -->
+  <!-- <button class="btn btn-primary m-1">Deposit</button> -->
+  <button class="btn btn-secondary m-1" (click)="toggleSection('deposit')">Deposit</button>
+  <button class="btn btn-secondary m-1" (click)="toggleSection('deposit')">Withdraw</button>
+  <button class="btn btn-secondary m-1" (click)="toggleSection('transfer')">Transfer</button>
+
+  <button class="btn btn-secondary m-1">Transaction History</button>
+  <button class="btn btn-secondary m-1">Benfisory</button>
+</div>
+
+<div class="container" *ngIf="activeSection === 'create'">
+  <h2>Create Bank Account</h2>
+  <form #createbankaccount="ngForm" (ngSubmit)="createAccount()">
+    <div>
+      <label for="name" class="form-label">Enter name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="name"
+        [(ngModel)]="form.name"
+        placeholder="Enter name"
+      />
+    </div>
+
+    <div>
+      <label for="date" class="form-label">Enter dob</label>
+      <input type="date" class="form-control" name="dob" [(ngModel)]="form.dob" />
+    </div>
+
+    <div>
+      <label for="email" class="form-label">Enter email</label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="enter email"
+        name="email"
+        [(ngModel)]="form.email"
+      />
+    </div>
+
+    <div>
+      <label for="gender" class="form-label">Gender :</label>
+      <label for="male" class="form-control" class="form-label">Male</label>
+      <input type="radio" name="gender" value="male" [(ngModel)]="form.gender" />
+      <label for="female" class="form-label">Female</label>
+      <input type="radio" name="gender" value="female" [(ngModel)]="form.gender" />
+    </div>
+
+    <div>
+      <label for="accountType" class="form-label">Account Type</label>
+      <select name="accountType" [(ngModel)]="form.accountType">
+        <option value="Savings">Savings</option>
+        <option value="Current">Current</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="depositAmount" class="form-label">Deposit Amount</label>
+      <input
+        type="number"
+        class="form-control"
+        name="deposit"
+        [(ngModel)]="form.depositAmount"
+        placeholder="Initial Deposit"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary m-1">Create Account</button>
+  </form>
+</div>
+
+<hr />
+
+<h3 *ngIf="createdAccount">Account Created Successfully!</h3>
+
+<!-- <p *ngIf="createdAccount">
+  Account Number: <b>{{ createdAccount.accountNumber }}</b
+  ><br />
+  Name: {{ createdAccount.name }}<br />
+  Balance: ₹{{ createdAccount.balance }}
+</p> -->
+
+<div *ngFor="let acc of accounts">
+  <p>
+    Account Number: {{ acc.accountNumber }} <br />
+    Name: {{ acc.name }} <br />
+    Balance: {{ acc.balance }}
+  </p>
+  <hr />
+</div>
+
+<hr />
+
+<div class="container" *ngIf="activeSection === 'deposit'">
+  <h3>Deposit Withdraw form</h3>
+  <div class="mb-2">
+    <label>Account Number</label>
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="transaction.accountNumber"
+      placeholder="Enter Account Number"
+      name="accNo"
+    />
+  </div>
+
+  <div class="mb-2">
+    <label>Amount</label>
+    <input
+      type="number"
+      class="form-control"
+      [(ngModel)]="transaction.amount"
+      placeholder="Enter Amount"
+      name="amount"
+    />
+  </div>
+
+  <button class="btn btn-success m-1" (click)="deposit()">Deposit</button>
+
+  <button class="btn btn-danger m-1" (click)="withdraw()">Withdraw</button>
+</div>
+
+<div class="container" *ngIf="activeSection === 'transfer'">
+  <h3>Bank Transfer</h3>
+
+  <input
+    class="form-control mb-2"
+    placeholder="From Account Number"
+    [(ngModel)]="fromAccountNumber"
+    name="fromAcc"
+  />
+
+  <input
+    class="form-control mb-2"
+    placeholder="To Account Number"
+    [(ngModel)]="toAccountNumber"
+    name="toAcc"
+  />
+
+  <input
+    type="number"
+    class="form-control mb-2"
+    placeholder="Amount"
+    [(ngModel)]="transferAmount"
+    name="transferAmt"
+  />
+
+  <button class="btn btn-warning" (click)="bankTransfer()">Transfer</button>
+</div>
+
+<hr />
+<h3>Transaction History</h3>
+
+<table class="table table-bordered" *ngIf="bankaccounttransactions.length > 0">
+  <thead class="table-dark">
+    <tr>
+      <th>Type</th>
+      <th>Account</th>
+      <th>Amount</th>
+      <th>Balance After</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of bankaccounttransactions">
+      <td>{{ t.type }}</td>
+      <td>{{ t.account }}</td>
+      <td>{{ t.amount }}</td>
+      <td>{{ t.balance }}</td>
+    </tr>
+  </tbody>
+</table>
