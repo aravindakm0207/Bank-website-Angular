@@ -34,8 +34,14 @@
   <button class="btn btn-secondary m-1" (click)="toggleSection('deposit')">Withdraw</button>
   <button class="btn btn-secondary m-1" (click)="toggleSection('transfer')">Transfer</button>
 
-  <button class="btn btn-secondary m-1">Transaction History</button>
-  <button class="btn btn-secondary m-1">Benfisory</button>
+  <!-- <button class="btn btn-secondary m-1" (click)="toggleSection('transferhistory')">
+    Transaction History
+  </button> -->
+  <!-- <button class="btn btn-secondary m-1" (click)="toggleSection('beneficiary')">Beneficiary</button> -->
+  <button class="btn btn-secondary m-1" (click)="viewBeneficiaries()">Beneficiaries</button>
+
+  <button class="btn btn-info m-1" (click)="viewAccounts()">View Accounts</button>
+  <button class="btn btn-secondary m-1" (click)="viewTransactions()">Transaction History</button>
 </div>
 
 <div class="container" *ngIf="activeSection === 'create'">
@@ -97,11 +103,10 @@
     </div>
     <button type="submit" class="btn btn-primary m-1">Create Account</button>
   </form>
+  <hr />
 </div>
 
-<hr />
-
-<h3 *ngIf="createdAccount">Account Created Successfully!</h3>
+<!-- <h3 *ngIf="createdAccount">Account Created Successfully!</h3> -->
 
 <!-- <p *ngIf="createdAccount">
   Account Number: <b>{{ createdAccount.accountNumber }}</b
@@ -110,16 +115,14 @@
   Balance: ₹{{ createdAccount.balance }}
 </p> -->
 
-<div *ngFor="let acc of accounts">
+<!-- <div *ngFor="let acc of accounts">
   <p>
     Account Number: {{ acc.accountNumber }} <br />
     Name: {{ acc.name }} <br />
     Balance: {{ acc.balance }}
   </p>
   <hr />
-</div>
-
-<hr />
+</div> -->
 
 <div class="container" *ngIf="activeSection === 'deposit'">
   <h3>Deposit Withdraw form</h3>
@@ -160,12 +163,19 @@
     name="fromAcc"
   />
 
-  <input
+  <!-- <input
     class="form-control mb-2"
     placeholder="To Account Number"
     [(ngModel)]="toAccountNumber"
     name="toAcc"
-  />
+  /> -->
+
+  <select class="form-control mb-2" [(ngModel)]="toAccountNumber" name="toAcc">
+    <option value="">Select Beneficiary</option>
+    <option *ngFor="let ben of beneficiaries" [value]="ben.accountNumber">
+      {{ ben.name }} - {{ ben.accountNumber }}
+    </option>
+  </select>
 
   <input
     type="number"
@@ -176,26 +186,66 @@
   />
 
   <button class="btn btn-warning" (click)="bankTransfer()">Transfer</button>
+  <hr />
+</div>
+<!-- 
+<div class="container" *ngIf="activeSection === 'transferhistory'">
+  <h3>Transaction History</h3>
+
+  <table class="table table-bordered" *ngIf="bankaccounttransactions.length > 0">
+    <thead class="table-dark">
+      <tr>
+        <th>Type</th>
+        <th>Account</th>
+        <th>Amount</th>
+        <th>Balance After</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of bankaccounttransactions">
+        <td>{{ t.type }}</td>
+        <td>{{ t.account }}</td>
+        <td>{{ t.amount }}</td>
+        <td>{{ t.balance }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+<div class="container" *ngIf="activeSection === 'beneficiary'">
+  <h3>Add Beneficiary</h3>
+
+  <input class="form-control mb-2" placeholder="Beneficiary Name" [(ngModel)]="beneficiary.name" />
+
+  <select class="form-control mb-2" [(ngModel)]="beneficiary.accountNumber">
+    <option value="">Select Account</option>
+    <option *ngFor="let acc of accounts" [value]="acc.accountNumber">
+      {{ acc.accountNumber }} - {{ acc.name }}
+    </option>
+  </select>
+
+  <button class="btn btn-primary" (click)="addBeneficiary()">Add Beneficiary</button>
+  <hr />
 </div>
 
-<hr />
-<h3>Transaction History</h3>
+<!-- <h4 *ngIf="beneficiaries.length > 0">Saved Beneficiaries</h4>
 
-<table class="table table-bordered" *ngIf="bankaccounttransactions.length > 0">
+<table class="table table-bordered mt-2" *ngIf="beneficiaries.length > 0">
   <thead class="table-dark">
     <tr>
-      <th>Type</th>
-      <th>Account</th>
-      <th>Amount</th>
-      <th>Balance After</th>
+      <th>#</th>
+      <th>Name</th>
+      <th>Account Number</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let t of bankaccounttransactions">
-      <td>{{ t.type }}</td>
-      <td>{{ t.account }}</td>
-      <td>{{ t.amount }}</td>
-      <td>{{ t.balance }}</td>
+    <tr *ngFor="let ben of beneficiaries; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ ben.name }}</td>
+      <td>{{ ben.accountNumber }}</td>
     </tr>
   </tbody>
-</table>
+</table> -->
+
+<!-- <p *ngIf="beneficiaries.length === 0" class="text-muted">No beneficiaries added yet</p> -->
+<app-about></app-about>

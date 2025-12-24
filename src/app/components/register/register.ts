@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -9,12 +9,16 @@ import { CommonModule } from '@angular/common';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register {
-  private router = inject(Router);
-  next() {
-    this.router.navigate(['']);
-  }
+export class Register implements OnInit {
   isSubmitted = false;
+
+  userData: any = null;
+  ngOnInit() {
+    const data = localStorage.getItem('user');
+    if (data) {
+      this.userData = JSON.parse(data);
+    }
+  }
 
   signup(form: NgForm) {
     this.isSubmitted = true;
@@ -23,17 +27,17 @@ export class Register {
       return;
     }
 
-    const userData = {
+    const savedUser = {
       name: form.value.name,
       email: form.value.email,
       password: form.value.password,
       mobile: form.value.mobile,
     };
 
-    console.log('Signup Data:', userData);
-
-    // reset form after submit
-    form.resetForm();
+    localStorage.setItem('user', JSON.stringify(savedUser));
+    this.userData = savedUser;
+    console.log('Signup Data:', savedUser);
     this.isSubmitted = false;
+    form.resetForm();
   }
 }

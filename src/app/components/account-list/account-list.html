@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-3">Bank Accounts</h2>
+
+  <table class="table table-bordered text-center" *ngIf="accounts.length > 0">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Account Number</th>
+        <th>Account Holder Name</th>
+        <th>Balance (₹)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let acc of accounts; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ acc.accountNumber }}</td>
+        <td>{{ acc.name }}</td>
+        <td>{{ acc.balance }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="text-center" *ngIf="accounts.length == 0">No bank accounts found.</p>
+</div>

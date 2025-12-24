@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { About } from '../about/about';
 
 @Component({
   selector: 'app-bank',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, About],
   templateUrl: './bank.html',
   styleUrl: './bank.css',
 })
@@ -51,7 +52,7 @@ export class Bank {
 
     accounts.push(newAccount);
     localStorage.setItem('bankAccounts', JSON.stringify(accounts));
-
+    this.router.navigate(['accounts']);
     this.createdAccount = newAccount;
   }
   ngOnInit() {
@@ -65,6 +66,38 @@ export class Bank {
     accountNumber: '',
     amount: 0,
   };
+  // deposit() {
+  //   const accounts = JSON.parse(localStorage.getItem('bankAccounts') || '[]');
+
+  //   const account = accounts.find(
+  //     (acc: any) => acc.accountNumber === this.transaction.accountNumber
+  //   );
+
+  //   if (!account) {
+  //     alert('Account not found');
+  //     return;
+  //   }
+
+  //   account.balance += Number(this.transaction.amount);
+  //   this.bankaccounttransactions.push({
+  //     type: 'Deposit',
+  //     account: account.accountNumber,
+  //     amount: this.transaction.amount,
+  //     balance: account.balance,
+  //   });
+
+  //   localStorage.setItem('bankAccounts', JSON.stringify(accounts));
+  // }
+
+  saveTransaction(txn: any) {
+    const history = JSON.parse(localStorage.getItem('transactions') || '[]');
+    history.push(txn);
+    localStorage.setItem('transactions', JSON.stringify(history));
+  }
+  viewTransactions() {
+    this.router.navigate(['transactions']);
+  }
+
   deposit() {
     const accounts = JSON.parse(localStorage.getItem('bankAccounts') || '[]');
 
@@ -78,7 +111,9 @@ export class Bank {
     }
 
     account.balance += Number(this.transaction.amount);
-    this.bankaccounttransactions.push({
+
+    // 🔹 SAVE TRANSACTION HERE
+    this.saveTransaction({
       type: 'Deposit',
       account: account.accountNumber,
       amount: this.transaction.amount,
@@ -86,7 +121,9 @@ export class Bank {
     });
 
     localStorage.setItem('bankAccounts', JSON.stringify(accounts));
+    alert('Deposit successful');
   }
+
   withdraw() {
     const accounts = JSON.parse(localStorage.getItem('bankAccounts') || '[]');
 
@@ -106,7 +143,14 @@ export class Bank {
 
     account.balance -= Number(this.transaction.amount);
 
-    this.bankaccounttransactions.push({
+    // this.bankaccounttransactions.push({
+    //   type: 'Withdraw',
+    //   account: account.accountNumber,
+    //   amount: this.transaction.amount,
+    //   balance: account.balance,
+    // });
+
+    this.saveTransaction({
       type: 'Withdraw',
       account: account.accountNumber,
       amount: this.transaction.amount,
@@ -141,13 +185,54 @@ export class Bank {
 
     fromAcc.balance -= Number(this.transferAmount);
     toAcc.balance += Number(this.transferAmount);
-    this.bankaccounttransactions.push({
+    // this.bankaccounttransactions.push({
+    //   type: 'Transfer',
+    //   account: this.fromAccountNumber,
+    //   amount: this.transferAmount,
+    //   balance: fromAcc.balance,
+    // });
+    this.saveTransaction({
       type: 'Transfer',
       account: this.fromAccountNumber,
       amount: this.transferAmount,
       balance: fromAcc.balance,
     });
+
+    localStorage.setItem('bankAccounts', JSON.stringify(accounts));
+    alert('Transfer successful');
   }
 
   accounts = JSON.parse(localStorage.getItem('bankAccounts') || '[]');
+
+  beneficiary = {
+    name: '',
+    accountNumber: '',
+  };
+
+  beneficiaries: any[] = JSON.parse(localStorage.getItem('beneficiaries') || '[]');
+  addBeneficiary() {
+    const accounts = JSON.parse(localStorage.getItem('bankAccounts') || '[]');
+
+    const accountExists = accounts.some(
+      (acc: any) => acc.accountNumber === this.beneficiary.accountNumber
+    );
+
+    if (!accountExists) {
+      alert('Account number does not exist');
+      return;
+    }
+
+    this.beneficiaries.push({ ...this.beneficiary });
+    localStorage.setItem('beneficiaries', JSON.stringify(this.beneficiaries));
+
+    this.beneficiary = { name: '', accountNumber: '' };
+    alert('Beneficiary added successfully');
+  }
+
+  viewAccounts() {
+    this.router.navigate(['accounts']);
+  }
+  viewBeneficiaries() {
+    this.router.navigate(['beneficiaries']);
+  }
 }

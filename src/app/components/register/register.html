@@ -1,4 +1,4 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
+<div class="container d-flex justify-content-center align-items-center">
   <div class="w-100" style="max-width: 400px">
     <h2 class="text-center mb-4">Signup</h2>
 
@@ -62,7 +62,15 @@
         <p class="text-danger" *ngIf="mobile.errors && mobile.touched">mobile number is required</p>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100" (click)="next()">Signup</button>
+      <button type="submit" class="btn btn-primary w-100">Signup</button>
     </form>
   </div>
+</div>
+
+<div *ngIf="userData" class="mt-4 p-3 border rounded">
+  <h4>Saved User Data</h4>
+  <p><strong>Name:</strong> {{ userData.name }}</p>
+  <p><strong>Email:</strong> {{ userData.email }}</p>
+  <p><strong>Password:</strong> {{ userData.password }}</p>
+  <p><strong>Mobile:</strong> {{ userData.mobile }}</p>
 </div>
