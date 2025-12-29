@@ -37,11 +37,11 @@
   <!-- <button class="btn btn-secondary m-1" (click)="toggleSection('transferhistory')">
     Transaction History
   </button> -->
-  <!-- <button class="btn btn-secondary m-1" (click)="toggleSection('beneficiary')">Beneficiary</button> -->
-  <button class="btn btn-secondary m-1" (click)="viewBeneficiaries()">Beneficiaries</button>
+  <button class="btn btn-secondary m-1" (click)="toggleSection('beneficiary')">Beneficiary</button>
 
   <button class="btn btn-info m-1" (click)="viewAccounts()">View Accounts</button>
-  <button class="btn btn-secondary m-1" (click)="viewTransactions()">Transaction History</button>
+  <button class="btn btn-info m-1" (click)="viewTransactions()">Transaction History</button>
+  <button class="btn btn-info m-1" (click)="viewBeneficiaries()">Beneficiaries</button>
 </div>
 
 <div class="container" *ngIf="activeSection === 'create'">
